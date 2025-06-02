@@ -1,0 +1,11 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+*.log
+# Agar Windowsda ishlayotgan bo'lsangiz va ba'zi tizim fayllari paydo bo'lsa:
+# Thumbs.db
+# desktop.ini
+# VS Code sozlamalari papkasi (agar Gitga qo'shishni istamasangiz)
+# .vscode/
