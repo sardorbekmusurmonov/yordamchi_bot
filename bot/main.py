@@ -4,8 +4,8 @@ import logging
 import sys
 
 from .bot_instance import bot, dp
-# handlers papkasidan common, weather va ENDI currency modullarini import qilamiz
-from .handlers import common, weather, currency # <<< 'currency' MODULINI IMPORT QILAMIZ
+# handlers papkasidan common, weather, currency VA ENDI news modullarini import qilamiz
+from .handlers import common, weather, currency, news # <<< 'news' MODULINI IMPORT QILAMIZ
 
 async def main():
     """
@@ -20,7 +20,8 @@ async def main():
     # Routerlarni dispatcherga ulaymiz
     dp.include_router(common.router)     # umumiy buyruqlar uchun
     dp.include_router(weather.router)    # ob-havo buyruqlari uchun
-    dp.include_router(currency.router)   # <<< VALYUTA KURSLARI UCHUN ROUTERNI QO'SHING
+    dp.include_router(currency.router)   # valyuta kurslari uchun
+    dp.include_router(news.router)       # <<< YANGILIKLAR UCHUN ROUTERNI QO'SHING
 
     # Bot ishga tushishidan oldin to'plangan, lekin qayta ishlanmagan
     # xabarlarni o'chirib yuborish.
