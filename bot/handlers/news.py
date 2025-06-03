@@ -46,41 +46,31 @@ async def get_latest_news(message: types.Message):
                     # Tarjima qilingan yangiliklarni yig'ish uchun
                     news_items_texts = []
                     for article_index, article in enumerate(articles, 1):
-                        title = article.get('title', "Sarlavha yo'q")
-                        description = article.get('description', "Qisqacha mazmun yo'q")
-                        url = article.get('url', '#') # Agar URL bo'lmasa
+                        title = article.get('title', "Sarlavha yo'q") # Bu yerda muammo yo'q
+                        description = article.get('description', "Qisqacha mazmun yo'q") # Bu yerda ham
+                        url = article.get('url', '#') 
                         source_name = article.get('source', {}).get('name', 'Noma\'lum manba')
 
                         translated_title = title
                         translated_description = description
                         
-                        # Faqat haqiqiy matn bo'lsa tarjima qilishga urinish
-                        if title and title not in ["Sarlavha yo'q", "[Removed]"]:
-                            try:
-                                translated_title = GoogleTranslator(source='auto', target='uz').translate(text=title)
-                                if not translated_title: translated_title = title # Agar tarjima None qaytarsa
-                            except Exception as e:
-                                print(f"Sarlavhani ('{title}') tarjima qilishda xato: {e}")
-                                # translated_title o'zgarishsiz qoladi (original)
-                        
-                        if description and description not in ["Qisqacha mazmun yo'q", "[Removed]"]:
-                            try:
-                                translated_description = GoogleTranslator(source='auto', target='uz').translate(text=description)
-                                if not translated_description: translated_description = description # Agar tarjima None qaytarsa
-                            except Exception as e:
-                                print(f"Tavsifni ('{description[:50]}...') tarjima qilishda xato: {e}")
-                                # translated_description o'zgarishsiz qoladi (original)
-                        
+                        # ... (tarjima logikasi) ...
+                        # Mana shu qismga e'tibor bering, translated_title va translated_description 
+                        # tarjimadan keyin None bo'lmasligini yoki original qiymatni saqlashini ta'minlang.
+                        # Agar ular None bo'lib qolsa, keyingi f-qator xato berishi mumkin emas, 
+                        # lekin 'None' deb chiqadi. Bizning oldingi kodimizda bu hisobga olingan.
+
+                        # MUAMMO BO'LGAN ASOSIY JOY:
                         news_items_texts.append(
-                            f"<b>{article_index}. {translated_title if translated_title else 'Sarlavha yo\'q'}</b>\n"
-                            f"📄 <i>{translated_description if translated_description else 'Qisqacha mazmun yo\'q'}</i>\n"
+                            f"<b>{article_index}. {translated_title if translated_title else \"Sarlavha yo'q\"}</b>\n"  # <<< O'ZGARTIRILDI: 'Sarlavha yo\'q' o'rniga \"Sarlavha yo'q\"
+                            f"📄 <i>{translated_description if translated_description else \"Qisqacha mazmun yo'q\"}</i>\n" # <<< O'ZGARTIRILDI: 'Qisqacha mazmun yo\'q' o'rniga \"Qisqacha mazmun yo'q\"
                             f"🔗 <a href='{url}'>Batafsil ({source_name})</a>\n"
                         )
                     
                     header = f"<b>⚡️ So'nggi {len(articles)} ta tarjima qilingan yangilik (AQSH manbalaridan):</b>\n"
                     full_reply = header + "\n".join(news_items_texts)
                     
-                    await message.answer(full_reply, disable_web_page_preview=True) # Linklar uchun oldindan ko'rishni o'chirish
+                    await message.answer(full_reply, disable_web_page_preview=True)
 
                 elif response.status == 401: # Unauthorized - API kaliti bilan muammo
                     print(f"NewsAPI KEY bilan muammo. Status: {response.status}")
